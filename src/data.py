@@ -56,8 +56,7 @@ def make_binary_corpus(imdb_sample=20000, tweet_sample=20000, seed=42):
 
     return DatasetDict(train=split["train"], validation=split["test"], test=test)
 
-# # Normalization functions for text preprocessing
-# src/data.py (top)
+# Normalization functions for text preprocessing
 import re
 _URL    = re.compile(r"(https?://\S+|www\.\S+)", re.IGNORECASE)
 _HANDLE = re.compile(r"@\w+")
