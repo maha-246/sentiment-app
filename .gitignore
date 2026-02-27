@@ -1,6 +1,7 @@
 .venv/
 __pycache__/
 models/
+!models/tfidf_logreg.joblib
 data/
 .DS_Store
 src/train_ml.py
