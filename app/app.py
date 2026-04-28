@@ -32,9 +32,39 @@ def load_tfidf():
     model_path = ROOT / "models" / "tfidf_logreg.joblib"
     return joblib.load(model_path)
 
-def show_result(label: str, confidence: float):
-    st.success(f"**{label}**  (confidence: {confidence:.3f})")
-    st.progress(min(max(confidence, 0.0), 1.0))
+def show_result(label: str, score: float):
+    if label == "POSITIVE":
+        bg_color = "#d4edda"
+        text_color = "#155724"
+        border_color = "#28a745"
+    elif label == "NEGATIVE":
+        bg_color = "#f8d7da"
+        text_color = "#721c24"
+        border_color = "#dc3545"
+    else:
+        bg_color = "#e2e3e5"
+        text_color = "#383d41"
+        border_color = "#6c757d"
+
+    st.markdown(
+        f"""
+        <div style="
+            background-color: {bg_color};
+            color: {text_color};
+            border-left: 6px solid {border_color};
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 18px;
+            margin-top: 12px;
+        ">
+            <strong>{label}</strong><br>
+            Score: {score:.3f}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.progress(min(max(score, 0.0), 1.0))
 
 if go:
     if not txt.strip():
@@ -43,7 +73,14 @@ if go:
         if backend.startswith("VADER"):
             sia = load_vader()
             score = sia.polarity_scores(txt)["compound"]
-            label = "POSITIVE" if score >= 0 else "NEGATIVE"
+
+            if score >= 0.05:
+                label = "POSITIVE"
+            elif score <= -0.05:
+                label = "NEGATIVE"
+            else:
+                label = "NEUTRAL"
+
             show_result(label, abs(score))
         else:
             # TF-IDF

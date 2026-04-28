@@ -5,3 +5,5 @@ models/
 data/
 .DS_Store
 src/train_ml.py
+notebook
+
